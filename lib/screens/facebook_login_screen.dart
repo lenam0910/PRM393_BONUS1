@@ -14,7 +14,6 @@ class FacebookLoginScreen extends StatelessWidget {
           child: Column(
             children: [
               const Spacer(flex: 3),
-              // Facebook Logo
               Container(
                 width: 50,
                 height: 50,
@@ -27,11 +26,11 @@ class FacebookLoginScreen extends StatelessWidget {
                   children: [
                     Positioned(
                       bottom: -1,
-                      right: 1,
+                      right: 0,
                       child: const Icon(
                         FontAwesomeIcons.facebookF,
                         color: Color(0xFF3b5998),
-                        size: 38,
+                        size: 40,
                       ),
                     ),
                   ],
@@ -39,7 +38,6 @@ class FacebookLoginScreen extends StatelessWidget {
               ),
               const Spacer(flex: 1),
 
-              // English • Change
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -70,7 +68,6 @@ class FacebookLoginScreen extends StatelessWidget {
 
               const SizedBox(height: 40),
 
-              // Inputs Container
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
@@ -80,16 +77,13 @@ class FacebookLoginScreen extends StatelessWidget {
                     _buildTextField(hint: 'Password', isPassword: true),
                     const SizedBox(height: 24),
 
-                    // LOGIN Button
                     SizedBox(
                       width: double.infinity,
                       height: 45,
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(
-                            0xFF4e69a2,
-                          ).withOpacity(0.4),
+                          backgroundColor: const Color(0x664E69A2),
                           foregroundColor: const Color(0xFFbdcce8),
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -120,7 +114,6 @@ class FacebookLoginScreen extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    decoration: TextDecoration.underline,
                     decorationColor: Colors.white,
                     decorationThickness: 1,
                   ),
@@ -129,37 +122,40 @@ class FacebookLoginScreen extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 18,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        FontAwesomeIcons.question,
-                        color: Color(0xFF3b5998),
-                        size: 10,
-                        fontWeight: FontWeight.bold,
+              SizedBox(
+                width: double.infinity,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  ),
-                ],
+                    Positioned(
+                      right: 30,
+                      child: Container(
+                        width: 18,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            FontAwesomeIcons.question,
+                            color: Color(0xFF3b5998),
+                            size: 10,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-
               const SizedBox(height: 20),
             ],
           ),
@@ -177,14 +173,9 @@ class FacebookLoginScreen extends StatelessWidget {
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 8),
         hintText: hint,
-        hintStyle: TextStyle(
-          color: Colors.white.withOpacity(0.6), // Light white placeholder
-          fontSize: 16,
-        ),
+        hintStyle: const TextStyle(color: Color(0x99FFFFFF), fontSize: 16),
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Color(0xFF8b9dc3),
-          ), // Lighter blue border
+          borderSide: BorderSide(color: Color(0xFF8b9dc3)),
         ),
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.white),
