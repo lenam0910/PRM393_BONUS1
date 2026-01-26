@@ -105,13 +105,8 @@ class InstagramLoginScreen extends StatelessWidget {
                       const SizedBox(height: 24),
 
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(
-                            child: Divider(
-                              color: const Color(0x66FFFFFF),
-                              thickness: 1,
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
@@ -121,12 +116,6 @@ class InstagramLoginScreen extends StatelessWidget {
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
                               ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: const Color(0x66FFFFFF),
-                              thickness: 1,
                             ),
                           ),
                         ],
