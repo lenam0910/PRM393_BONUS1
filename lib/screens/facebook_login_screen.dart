@@ -1,8 +1,74 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 
-class FacebookLoginScreen extends StatelessWidget {
+class FacebookLoginScreen extends StatefulWidget {
   const FacebookLoginScreen({super.key});
+
+  @override
+  State<FacebookLoginScreen> createState() => _FacebookLoginScreenState();
+}
+
+class _FacebookLoginScreenState extends State<FacebookLoginScreen> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _login() async {
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (username.isEmpty || password.isEmpty) {
+      _showMessage('Vui lòng nhập đầy đủ Username và Password');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://securitymindset.ongbantat.io.vn/api/auth/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'username': username, 'password': password}),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(response.statusCode == 200 ? 'Thành công' : 'Thất bại'),
+            content: Text(data.toString()),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        _showMessage('Lỗi kết nối: $e');
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  void _showMessage(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,16 +138,23 @@ class FacebookLoginScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
                   children: [
-                    _buildTextField(hint: 'Email or Phone'),
+                    _buildTextField(
+                      hint: 'Username',
+                      controller: _usernameController,
+                    ),
                     const SizedBox(height: 16),
-                    _buildTextField(hint: 'Password', isPassword: true),
+                    _buildTextField(
+                      hint: 'Password',
+                      isPassword: true,
+                      controller: _passwordController,
+                    ),
                     const SizedBox(height: 24),
 
                     SizedBox(
                       width: double.infinity,
                       height: 45,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: _isLoading ? null : _login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0x664E69A2),
                           foregroundColor: const Color(0xFFbdcce8),
@@ -90,14 +163,23 @@ class FacebookLoginScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(3),
                           ),
                         ),
-                        child: const Text(
-                          'LOG IN',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text(
+                                'LOG IN',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
                       ),
                     ),
                   ],
@@ -164,8 +246,13 @@ class FacebookLoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField({required String hint, bool isPassword = false}) {
+  Widget _buildTextField({
+    required String hint,
+    bool isPassword = false,
+    required TextEditingController controller,
+  }) {
     return TextField(
+      controller: controller,
       obscureText: isPassword,
       style: const TextStyle(color: Colors.white, fontSize: 16),
       cursorColor: Colors.white,
